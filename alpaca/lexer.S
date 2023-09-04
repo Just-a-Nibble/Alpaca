@@ -3,7 +3,7 @@
 
 MAX_TOKEN_LENGTH = 512
 
-.data
+.bss
 
 current_character:
 	.zero 1
@@ -40,15 +40,18 @@ next_token: # (%rdi: fd) -> ()
 	# %rdx: TRAMPLED
 	# %rsi: TRAMPLED
 	# %rdi: File Descriptor
+	#  %r8: Buffer Length
 
 	push %rax                                    # Push register state
 	push %rbx
 	push %rcx
 	push %rdx
 	push %rsi
+	push %r8
 
 	mov $0, %rax                                 # Not necessary, clear upper bytes
 	lea (current_token), %rbx                    # Set buffer write pointer
+	mov $0, %r8                                  # Set buffer length
 
 _nt_space_loop_start:
 	call next_character                          # Read next character
@@ -63,6 +66,10 @@ _nt_loop_start:
 	movb %al, (%rbx)                             # Write character to token
 	inc %rbx                                     #   step write pointer foreward
 
+	cmp $MAX_TOKEN_LENGTH, %r8                   # Check if over token length
+	jge error_token_overflow                     #   if so, display error
+	inc %r8                                      #   if not, increment length
+
 	call next_character                          # Read next character
 
 	call isspace                                 # Check if we reached token end
@@ -71,7 +78,8 @@ _nt_loop_start:
 _nt_return:
 	movb $0, (%rbx)                              # Null terminate token
 
-	pop %rsi                                     # Pop register state
+	pop %r8                                      # Pop register state
+	pop %rsi
 	pop %rdx
 	pop %rcx
 	pop %rbx
