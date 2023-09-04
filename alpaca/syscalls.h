@@ -1,0 +1,4 @@
+
+SYS_READ = 0
+SYS_WRITE = 1
+SYS_EXIT = 60
