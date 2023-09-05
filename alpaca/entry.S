@@ -12,7 +12,12 @@ _loop_start:
 
 	movb (current_token), %al
 	cmp $0, %al
-	jne _loop_start
+	je _loop_end
+
+	call parse_statement
+
+	jmp _loop_start
+_loop_end:
 
 	mov $SYS_EXIT, %rax
 	mov $0, %rdi
