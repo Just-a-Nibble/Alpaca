@@ -62,6 +62,12 @@ _nt_space_loop_start:
 	call isspace                                 # Check if we reached a space
 	je _nt_space_loop_start                      #   if so, repeat loop
 
+	cmp $'\"', %al                               # Check for string literal
+	je error_not_implemented                     #   if so, throw error (not implemented)
+
+	cmp $'(', %al                                # Check for comment
+	je error_not_implemented                     #   if so, throw error (not implemented)
+
 _nt_loop_start:
 	movb %al, (%rbx)                             # Write character to token
 	inc %rbx                                     #   step write pointer foreward
