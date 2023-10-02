@@ -1,19 +1,27 @@
 
-.include "alpaca/filenos.h"
-.include "alpaca/syscalls.h"
-
 .text
 
 .global parse_statement
 parse_statement:
 	push %rax
 
-_ps_check_integer_literal:
+_ps_check_end_of_file:
 	mov (current_token), %al
+	cmp $0x00, %al
+	je error_end_of_file
+
+_ps_check_integer_literal:
 	call isdigit
-	jne _ps_check_call
+	jne _ps_check_keyword_end
 	call parse_integer_literal
 	jmp _ps_return
+
+_ps_check_keyword_end:
+	lea (current_token), %rdi
+	lea (keyword_end), %rsi
+	call string_equals
+	jne _ps_check_call
+	jmp error_internal
 
 _ps_check_call:
 	call parse_function_call
