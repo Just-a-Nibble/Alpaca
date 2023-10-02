@@ -9,9 +9,9 @@ OBJS = $(SRCS:%.S=%.o)
 	as $(@:%.o=%.S) -o $@
 
 compiler: $(OBJS) $(HDRS)
-	ld $(OBJS) -o compiler
+	ld -S $(OBJS) -o compiler
 
-compiler-debug: $(SRCS) $(HDRS)
+compiler-debug: $(OBJS) $(HDRS)
 	ld $(OBJS) -o compiler-debug
 
 clean:
