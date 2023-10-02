@@ -12,16 +12,29 @@ _ps_check_end_of_file:
 
 _ps_check_integer_literal:
 	call isdigit
-	jne _ps_check_keyword_end
+	jne _ps_check_keyword_if
 	call parse_integer_literal
 	jmp _ps_return
+
+_ps_check_keyword_if:
+	lea (current_token), %rdi
+	lea (keyword_if), %rsi
+	call string_equals
+	jne _ps_check_keyword_else
+	call parse_if_else
+	jmp _ps_return
+
+_ps_check_keyword_else:
+	lea (current_token), %rdi
+	lea (keyword_else), %rsi
+	call string_equals
+	je error_syntax
 
 _ps_check_keyword_end:
 	lea (current_token), %rdi
 	lea (keyword_end), %rsi
 	call string_equals
-	jne _ps_check_call
-	jmp error_internal
+	je error_internal
 
 _ps_check_call:
 	call parse_function_call
