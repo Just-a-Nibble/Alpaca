@@ -1,4 +1,5 @@
 
+.include "alpaca/filenos.h"
 .include "alpaca/syscalls.h"
 
 MAX_TOKEN_LENGTH = 512
@@ -14,9 +15,9 @@ current_token:
 
 .text
 
-next_character: # (%rdi: fd) -> (%al: char)
+next_character: # () -> (%al: char)
 	mov $SYS_READ, %rax                          # Read Syscall
-	                                             #   file descriptor passed in
+	mov $STDIN, %rdi                             #   from stdin
 	lea (current_character), %rsi                #   destination buffer
 	mov $1, %rdx                                 #   buffer size
 	syscall
@@ -32,14 +33,13 @@ _nc_return:
 	ret                                          # Return
 
 .global next_token
-next_token: # (%rdi: fd) -> ()
+next_token: # () -> (current_token)
 	#### REGISTER USAGE ####
 	#  %al: Current character
 	# %rbx: Buffer Pointer
 	# %rcx: TRAMPLED
 	# %rdx: TRAMPLED
 	# %rsi: TRAMPLED
-	# %rdi: File Descriptor
 	#  %r8: Buffer Length
 
 	push %rax                                    # Push register state
