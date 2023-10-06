@@ -1,18 +1,24 @@
-all: compiler
+all: compiler stdlib
 
-SRCS = $(shell find alpaca/ -name '.ccls-cache' -type d -prune -o -type f -name '*.S' -print)
-HDRS = $(shell find alpaca/ -name '.ccls-cache' -type d -prune -o -type f -name '*.h' -print)
+COMP_SRCS = $(shell find alpaca/ -name '.ccls-cache' -type d -prune -o -type f -name '*.S' -print)
+COMP_HDRS = $(shell find alpaca/ -name '.ccls-cache' -type d -prune -o -type f -name '*.h' -print)
 
-OBJS = $(SRCS:%.S=%.o)
+STD_SRCS = $(shell find llama/ -name '.ccls-cache' -type d -prune -o -type f -name '*.S' -print)
+STD_HDRS = $(shell find llama/ -name '.ccls-cache' -type d -prune -o -type f -name '*.h' -print)
 
-%.o: %.S $(HDRS)
+COMP_OBJS = $(COMP_SRCS:%.S=%.o)
+
+%.o: %.S $(COMP_HDRS)
 	as $(@:%.o=%.S) -o $@
 
-compiler: $(OBJS) $(HDRS)
-	ld -S $(OBJS) -o compiler
+compiler: $(COMP_OBJS) $(COMP_HDRS)
+	ld -S $(COMP_OBJS) -o compiler
 
-compiler-debug: $(OBJS) $(HDRS)
-	ld $(OBJS) -o compiler-debug
+compiler-debug: $(COMP_OBJS) $(COMP_HDRS)
+	ld $(COMP_OBJS) -o compiler-debug
+
+stdlib: $(STD_HDRS)
+	as $(STD_SRCS) -o llama/std.o
 
 clean:
-	rm -f compiler compiler-debug $(OBJS)
+	rm -f compiler compiler-debug $(COMP_OBJS) llama/std.o
