@@ -5,7 +5,7 @@
 .text
 
 asm_integer_literal_0:
-	.ascii "\tmov $"
+	.ascii "\tmovq $"
 asm_integer_literal_0_len = . - asm_integer_literal_0
 
 asm_integer_literal_1:
