@@ -66,7 +66,7 @@ _nt_space_loop_start:
 	je error_not_implemented                     #   if so, throw error (not implemented)
 
 	cmp $'(', %al                                # Check for comment
-	je error_not_implemented                     #   if so, throw error (not implemented)
+	je _nt_comment_loop_start                    #   if so, parse the comment
 
 _nt_loop_start:
 	movb %al, (%rbx)                             # Write character to token
@@ -92,3 +92,14 @@ _nt_return:
 	pop %rax
 
 	ret                                          # Return
+
+_nt_comment_loop_start:
+	call next_character                          # Read next character
+
+	cmp $0, %al                                  # Check for end of file
+	je error_end_of_file                         #   if so, throw error (unterminated comment)
+
+	cmp $')', %al                                # Check for end of comment
+	je _nt_space_loop_start                      #   if so, parse the following token
+
+	jmp _nt_comment_loop_start                   # If none of the above, continue parsing
