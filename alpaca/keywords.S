@@ -5,6 +5,14 @@
 keyword_def:
 	.asciz "def"
 
+.global keyword_data
+keyword_data:
+	.asciz "data"
+
+.global keyword_addr_of
+keyword_addr_of:
+	.asciz "addr_of"
+
 .global keyword_if
 keyword_if:
 	.asciz "if"

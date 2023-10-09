@@ -12,12 +12,20 @@ _loop_start:
 	cmp $0, %al
 	je _loop_end
 
-_check_function_declaration:
 	lea (current_token), %rsi
+
+_check_function_declaration:
 	lea (keyword_def), %rdi
 	call string_equals
-	jne _check_end
+	jne _check_data_declaration
 	call parse_function_declaration
+	jmp _loop_start
+
+_check_data_declaration:
+	lea (keyword_data), %rdi
+	call string_equals
+	jne _check_end
+	call parse_data_declaration
 	jmp _loop_start
 
 _check_end:

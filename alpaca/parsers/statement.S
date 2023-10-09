@@ -20,8 +20,16 @@ _ps_check_keyword_if:
 	lea (current_token), %rdi
 	lea (keyword_if), %rsi
 	call string_equals
-	jne _ps_check_keyword_else
+	jne _ps_check_keyword_addr_of
 	call parse_if_else
+	jmp _ps_return
+
+_ps_check_keyword_addr_of:
+	lea (current_token), %rdi
+	lea (keyword_addr_of), %rsi
+	call string_equals
+	jne _ps_check_keyword_else
+	call parse_addr_of
 	jmp _ps_return
 
 _ps_check_keyword_else:
