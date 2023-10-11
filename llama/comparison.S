@@ -20,11 +20,11 @@ neq: # ( a b -- a!=b )
 	mov -16(%r8), %rax
 	mov  -8(%r8), %rbx
 	cmp %rax, %rbx
-	jne _neq_false
-	movq $0, -16(%r8)
+	je _neq_false
+	movq $1, -16(%r8)
 	jmp _neq_end
 _neq_false:
-	movq $1, -16(%r8)
+	movq $0, -16(%r8)
 _neq_end:
 	sub $8, %r8
 	ret
