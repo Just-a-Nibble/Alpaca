@@ -1,24 +1,36 @@
 
-SYS_READ  = 0
-SYS_WRITE = 1
-
 STDIN  = 0
 STDOUT = 1
 STDERR = 2
 
 .text
 
-.global puts
-puts: # ( s -- )
+.global fputs
+fputs: # ( fd str -- )
 	call dup
 	call str_len
+	call sys_write
+	call drop
+	ret
 
-	mov $SYS_WRITE, %rax
-	mov $STDOUT, %rdi
-	mov -16(%r8), %rsi
-	mov -8(%r8), %rdx
-	syscall
+.global puts
+puts: # ( s -- )
+	movq $STDOUT, (%r8)
+	add $8, %r8
 
-	sub $16, %r8
+	call swap
+
+	call fputs
+
+	ret
+
+.global eputs
+eputs: # ( s -- )
+	movq $STDERR, (%r8)
+	add $8, %r8
+
+	call swap
+
+	call fputs
 
 	ret
