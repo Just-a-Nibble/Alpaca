@@ -1,0 +1,9 @@
+
+def main
+	(
+		The topmost value on the stack after main
+		is the return value.
+	)
+
+	42 (Return 42)
+end

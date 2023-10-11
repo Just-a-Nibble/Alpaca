@@ -1,0 +1,14 @@
+
+def main
+	9                                            (9)
+	5 3 umod                                     (9 2)
+	div                                          (4)
+
+	82 9 udiv                                    (4 9)
+	4 sub                                        (4 5)
+	mult                                         (20)
+
+	6 4 mod                                      (20 2)
+	11 umult                                     (20 22)
+	add                                          (Return 42)
+end

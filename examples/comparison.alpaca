@@ -1,0 +1,18 @@
+
+def main
+	3 2 eq (3!=2: False - 0)
+
+	1 neq (0!=1: True - 1)
+
+	1 less (1<1: False - 0)
+
+	0 great (0>0: False - 0)
+
+	1 leq (0<=1: True - 1)
+	1 geq (1>=1: True - 1)
+
+	0 geq (1>=0: True - 1)
+	2 leq (1<=2: True - 1)
+
+	41 add (41+1 - Return 42)
+end

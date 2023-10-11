@@ -1,0 +1,7 @@
+
+def main
+	(Print Hello World!)
+	"Hello World!\n" puts
+
+	42 (Return 42)
+end

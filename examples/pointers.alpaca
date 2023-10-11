@@ -1,0 +1,20 @@
+
+data Value0
+	0
+end
+
+def update ( p -- )
+	42 store
+end
+
+def main
+	(Write 42 to Value0)
+	addr_of Value0
+	update
+
+	(Read from Value0)
+	addr_of Value0
+	load
+
+	(Return result)
+end
