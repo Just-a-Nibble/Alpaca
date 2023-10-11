@@ -12,8 +12,14 @@ _ps_check_end_of_file:
 
 _ps_check_integer_literal:
 	call isdigit
-	jne _ps_check_keyword_if
+	jne _ps_check_string_literal
 	call parse_integer_literal
+	jmp _ps_return
+
+_ps_check_string_literal:
+	cmp $'\"', %al
+	jne _ps_check_keyword_if
+	call parse_string_literal
 	jmp _ps_return
 
 _ps_check_keyword_if:

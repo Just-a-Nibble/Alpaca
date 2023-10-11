@@ -20,6 +20,10 @@ msg_end_of_file:
 	.ascii "[ERROR] Unexpected End of File.\n"
 msg_end_of_file_len = . - msg_end_of_file
 
+msg_end_of_line:
+	.ascii "[ERROR] Unexpected End of Line.\n"
+msg_end_of_line_len = . - msg_end_of_line
+
 msg_syntax:
 	.ascii "[ERROR] Invalid Syntax.\n"
 msg_syntax_len = . - msg_syntax
@@ -48,6 +52,12 @@ error_internal: # () -> EXIT 1
 error_end_of_file: # () -> EXIT 1
 	lea (msg_end_of_file), %rsi
 	mov $msg_end_of_file_len, %rdx
+	jmp error_buffer
+
+.global error_end_of_line
+error_end_of_line: # () -> EXIT 1
+	lea (msg_end_of_line), %rsi
+	mov $msg_end_of_line_len, %rdx
 	jmp error_buffer
 
 .global error_syntax

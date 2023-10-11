@@ -4,6 +4,8 @@
 
 MAX_TOKEN_LENGTH = 512
 
+EOF = 0
+
 .bss
 
 current_character:
@@ -25,7 +27,7 @@ next_character: # () -> (%al: char)
 	cmp $1, %rax                                 # Check for success
 	je _nc_return                                #   if so, return
 
-	movb $0, (current_character)                 # If not, return null byte
+	movb $EOF, (current_character)               # If not, return EOF
 _nc_return:
 	mov $0, %rax                                 # Not necessary, clear upper bytes
 	mov (current_character), %al                 # Load character into return
@@ -56,14 +58,14 @@ next_token: # () -> (current_token)
 _nt_space_loop_start:
 	call next_character                          # Read next character
 
-	cmp $0, %al                                  # Check if we reached file end
+	cmp $EOF, %al                                # Check if we reached file end
 	je _nt_return                                #   if so, return
 
 	call isspace                                 # Check if we reached a space
 	je _nt_space_loop_start                      #   if so, repeat loop
 
 	cmp $'\"', %al                               # Check for string literal
-	je error_not_implemented                     #   if so, throw error (not implemented)
+	je _nt_string_loop_start                     #   if so, throw error (not implemented)
 
 	cmp $'(', %al                                # Check for comment
 	je _nt_comment_loop_start                    #   if so, parse the comment
@@ -96,10 +98,37 @@ _nt_return:
 _nt_comment_loop_start:
 	call next_character                          # Read next character
 
-	cmp $0, %al                                  # Check for end of file
+	cmp $EOF, %al                                # Check for end of file
 	je error_end_of_file                         #   if so, throw error (unterminated comment)
 
 	cmp $')', %al                                # Check for end of comment
 	je _nt_space_loop_start                      #   if so, parse the following token
 
 	jmp _nt_comment_loop_start                   # If none of the above, continue parsing
+
+_nt_string_loop_start:
+	movb %al, (%rbx)
+	inc %rbx
+
+	cmp $MAX_TOKEN_LENGTH, %r8                   # Check if over token length
+	jge error_token_overflow                     #   if so, display error
+	inc %r8                                      #   if not, increment length
+
+	call next_character
+
+	cmp $'\n', %al
+	je error_end_of_line
+
+	cmp $'\r', %al
+	je error_end_of_line
+
+	cmp $EOF, %al
+	je error_end_of_file
+
+	cmp $'\"', %al
+	jne _nt_string_loop_start
+
+	movb %al, (%rbx)
+	inc %rbx
+
+	jmp _nt_return
