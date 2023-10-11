@@ -1,0 +1,4 @@
+*.o
+
+compiler
+compiler-debug
