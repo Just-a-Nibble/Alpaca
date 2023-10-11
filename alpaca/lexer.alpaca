@@ -1,0 +1,61 @@
+
+data STDIN 0 end
+
+def next_character ( ptr -- char )
+	dup                                        ( ptr ptr )
+
+	addr_of STDIN load                         ( ptr ptr STDIN )
+	swap                                       ( ptr STDIN ptr )
+	1                                          ( ptr STDIN ptr 1 )
+	sys_read                                   ( ptr len )
+
+	( Check if read failed )
+	1 neq if
+		( If so, write null byte to pointer )
+		dup 0 store8
+	end
+
+	                                           ( ptr )
+
+	load8                                      ( char )
+end
+
+( TODO: Replace with bss )
+data current_token
+	(512 characters, including null byte)
+
+	0 0 0 0 0 0 0 0
+	0 0 0 0 0 0 0 0
+	0 0 0 0 0 0 0 0
+	0 0 0 0 0 0 0 0
+end
+
+def recursive_skip_whitespace ( ptr -- )
+	dup next_character
+
+	dup 0 eq if
+		drop
+		0 store8
+	else isspace if
+		recursive_skip_whitespace
+	else
+		1 add
+		recursive_consume_token
+	end end
+end
+
+def recursive_consume_token ( ptr -- )
+	dup next_character
+
+	isspace if
+		0 store8
+	else
+		1 add
+		recursive_consume_token
+	end
+end
+
+def next_token ( -- )
+	addr_of current_token
+	recursive_skip_whitespace
+end

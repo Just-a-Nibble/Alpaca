@@ -1,4 +1,18 @@
 
+def recursive_print_tokens
+	next_token
+
+	addr_of current_token "" str_eq if
+		"EOF\n" eputs
+	else
+		"Token: '" eputs
+		addr_of current_token eputs
+		"'\n" eputs
+
+		recursive_print_tokens
+	end
+end
+
 def main
-	42
+	recursive_print_tokens
 end

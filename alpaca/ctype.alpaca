@@ -1,0 +1,13 @@
+
+def isspace ( char -- bool )
+	dup 0x20 eq if 1 else ( Space )
+	dup 0x0a eq if 1 else ( Newline )
+	dup 0x0d eq if 1 else ( Carriage Return )
+	dup 0x09 eq if 1 else ( Tab )
+
+	0 ( None of the above )
+
+	end end end end
+
+	swap drop ( Remove the character )
+end
