@@ -66,14 +66,3 @@ rm output.o # Don't need this anymore
 ```
 
 And done, just run ```output```.
-
-## TODO
- * Store strings in read-only segment (can't do .text because
-   I don't like the possibility of jumping to a string, and because
-   strings are defined in-line; see parsers/string_literal.S).
- * Defined macros for making codegen better
- * Be able to store data in .bss segment
- * Expand io.S and string.S
- * Bootstrap (shouldn't be too difficult)
- * See if we can directly output an object file (instead of needing
-   the GNU assembler, which is more complex than Alpaca itself).
