@@ -1,0 +1,4 @@
+
+def parse_data_declaration ( -- )
+	throw_not_implemented_error
+end

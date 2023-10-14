@@ -11,3 +11,11 @@ def isspace ( char -- bool )
 
 	swap drop ( Remove the character )
 end
+
+def isdigit ( char -- bool )
+	dup 48 geq if ( Greater/equal to '0' )
+		57 leq if ( Less/equal to '9' )
+			1
+		else 0 end
+	else drop 0 end
+end

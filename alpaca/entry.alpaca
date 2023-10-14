@@ -1,18 +1,25 @@
 
-def recursive_print_tokens
+def recursive_parse_top_level ( -- )
 	next_token
 
 	addr_of current_token "" str_eq if
-		"EOF\n" eputs
+		( Reached EOF, so finish )
 	else
-		"Token: '" eputs
-		addr_of current_token eputs
-		"'\n" eputs
+		addr_of current_token "def" str_eq if
+			parse_function_declaration
+		else
+			addr_of current_token "data" str_eq if
+				parse_data_declaration
+			else
+				throw_invalid_syntax_error
+			end
+		end
 
-		recursive_print_tokens
+		recursive_parse_top_level
 	end
 end
 
+
 def main
-	recursive_print_tokens
+	recursive_parse_top_level
 end

@@ -1,0 +1,20 @@
+
+def parse_statement ( -- )
+	addr_of current_token
+
+	dup "" str_eq if
+		throw_eof_error
+	end
+
+	dup load8 isdigit if
+		drop parse_integer_literal
+	else dup load8 34 eq if
+		drop parse_string_literal
+	else dup "addr_of" str_eq if
+		drop parse_addr_of
+	else dup "if" str_eq if
+		drop parse_if_else
+	else
+		drop parse_function_call
+	end end end end
+end

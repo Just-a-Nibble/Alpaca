@@ -1,0 +1,17 @@
+
+def throw_error ( msg -- EXIT )
+	eputs
+	1 sys_exit
+end
+
+def throw_eof_error ( -- EXIT )
+	"[ERROR] Unexpected End of File.\n" throw_error
+end
+
+def throw_invalid_syntax_error ( -- EXIT )
+	"[ERROR] Invalid Syntax.\n" throw_error
+end
+
+def throw_not_implemented_error ( -- EXIT )
+	"[ERROR] Not Implemented.\n" throw_error
+end

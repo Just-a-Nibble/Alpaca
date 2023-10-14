@@ -1,0 +1,4 @@
+
+def parse_if_else ( -- )
+	throw_not_implemented_error
+end

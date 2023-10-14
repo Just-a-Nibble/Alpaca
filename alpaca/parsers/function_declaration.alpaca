@@ -1,0 +1,28 @@
+
+def recursive_parse_function_declaration_body ( -- )
+	next_token
+
+	addr_of current_token "end" str_eq if
+		( Reached end of block, so fall through )
+	else
+		parse_statement
+
+		recursive_parse_function_declaration_body
+	end
+end
+
+def parse_function_declaration ( -- )
+	next_token ( Get function identifier )
+
+	addr_of current_token "" str_eq if
+		throw_eof_error
+	end
+
+	".text\n" puts
+	".global " puts addr_of current_token puts "\n" puts
+	addr_of current_token puts ":\n" puts
+
+	recursive_parse_function_declaration_body
+
+	"\tret\n" puts
+end

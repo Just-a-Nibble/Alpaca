@@ -1,0 +1,6 @@
+
+def parse_function_call ( -- )
+	"\tcall " puts
+	addr_of current_token puts
+	"\n" puts
+end

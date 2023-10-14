@@ -1,0 +1,7 @@
+
+def parse_integer_literal ( -- )
+	"\tmovq $" puts
+	addr_of current_token puts
+	", (%r8)\n" puts
+	"\tadd $8, %r8\n" puts
+end
