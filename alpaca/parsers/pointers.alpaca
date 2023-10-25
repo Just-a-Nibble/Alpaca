@@ -1,4 +1,10 @@
 
 def parse_addr_of ( -- )
-	throw_not_implemented_error
+	next_token ( Get function identifier )
+
+	"\tlea (" puts
+	addr_of current_token puts
+	        "), %rax\n" puts
+	"\tmov %rax, (%r8)\n" puts
+	"\tadd $8, %r8\n" puts
 end
