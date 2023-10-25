@@ -1,4 +1,28 @@
 
+def recursive_parse_data_declaration_body ( -- )
+	next_token
+
+	addr_of current_token "end" str_eq if
+		( Reached end of block, so fall through )
+	else
+		"\t.quad " puts
+		addr_of current_token puts
+		"\n" puts
+
+		recursive_parse_data_declaration_body
+	end
+end
+
 def parse_data_declaration ( -- )
-	throw_not_implemented_error
+	next_token ( Get data identifier )
+
+	addr_of current_token "" str_eq if
+		throw_eof_error
+	end
+
+	"\n.data\n" puts
+	".global " puts addr_of current_token puts "\n" puts
+	addr_of current_token puts ":\n" puts
+
+	recursive_parse_data_declaration_body
 end

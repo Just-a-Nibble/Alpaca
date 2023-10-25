@@ -18,7 +18,7 @@ def parse_function_declaration ( -- )
 		throw_eof_error
 	end
 
-	".text\n" puts
+	"\n.text\n" puts
 	".global " puts addr_of current_token puts "\n" puts
 	addr_of current_token puts ":\n" puts
 
