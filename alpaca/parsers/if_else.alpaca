@@ -1,4 +1,66 @@
 
+data if_label_id 0 end
+
+def recursive_parse_true_body ( base_label_id -- )
+	next_token
+
+	addr_of current_token "end" str_eq if
+		"_label_if_" puts
+		putuint
+		":\n" puts
+	else
+		addr_of current_token "else" str_eq if
+			dup
+
+			"\tjmp _label_if_" puts
+			dup 1 add putuint
+			"\n" puts
+
+			"_label_if_" puts
+			dup putuint
+			":\n" puts
+
+			recursive_parse_false_body
+		else
+			parse_statement
+
+			recursive_parse_true_body
+		end
+	end
+end
+
+def recursive_parse_false_body ( base_label_id -- )
+	next_token
+
+	addr_of current_token "end" str_eq if
+		"_label_if_" puts
+		1 add putuint
+		":\n" puts
+	else
+		addr_of current_token "else" str_eq if
+			throw_invalid_syntax_error
+		else
+			parse_statement
+
+			recursive_parse_false_body
+		end
+	end
+end
+
 def parse_if_else ( -- )
-	throw_not_implemented_error
+	addr_of if_label_id load
+
+	"\tsub $8, %r8\n" puts
+	"\tmov (%r8), %rax\n" puts
+	"\tcmp $0, %rax\n" puts
+	"\tje _label_if_" puts
+	dup putuint
+	"\n" puts
+
+	( Increment if label id so recursive labels are correct )
+	2 add addr_of if_label_id swap store
+
+	recursive_parse_true_body
+
+	drop
 end
