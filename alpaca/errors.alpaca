@@ -8,6 +8,10 @@ def throw_eof_error ( -- EXIT )
 	"[ERROR] Unexpected End of File.\n" throw_error
 end
 
+def throw_unterm_comment_eof_error ( -- EXIT )
+	"[ERROR] Unexpected End of File while Parsing Comment.\n" throw_error
+end
+
 def throw_invalid_syntax_error ( -- EXIT )
 	"[ERROR] Invalid Syntax.\n" throw_error
 end

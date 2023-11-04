@@ -33,15 +33,24 @@ end
 def recursive_skip_whitespace ( ptr -- )
 	dup next_character
 
-	dup 0 eq if
-		drop
+	dup 0 eq if drop
 		0 store8
-	else isspace if
-		recursive_skip_whitespace
 	else
-		1 add
-		recursive_consume_token
-	end end
+		dup isspace if drop
+			recursive_skip_whitespace
+		else
+			dup 40 eq if drop
+				recursive_skip_comment
+			else
+				34 eq if
+					recursive_consume_string_token
+				else
+					1 add
+					recursive_consume_token
+				end
+			end
+		end
+	end
 end
 
 def recursive_consume_token ( ptr -- )
@@ -55,7 +64,26 @@ def recursive_consume_token ( ptr -- )
 	end
 end
 
+def recursive_consume_string_token ( ptr -- )
+	throw_not_implemented_error
+end
+
+def recursive_skip_comment ( ptr -- )
+	dup next_character
+
+	dup 0 eq if drop drop
+		throw_unterm_comment_eof_error
+	else
+		41 eq if
+			recursive_skip_whitespace
+		else
+			recursive_skip_comment
+		end
+	end
+end
+
 def next_token ( -- )
 	addr_of current_token
+
 	recursive_skip_whitespace
 end
