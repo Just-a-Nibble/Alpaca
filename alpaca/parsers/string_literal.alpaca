@@ -1,4 +1,16 @@
 
+data string_label_id 0 end
+
 def parse_string_literal ( -- )
-	throw_not_implemented_error
+	addr_of string_label_id load
+
+	".data\n" puts
+	"_label_string_" puts dup putuint ":\n" puts
+	"\t.asciz " puts addr_of current_token puts "\n" puts
+	".text\n" puts
+	"\tlea (_label_string_" puts dup putuint "), %rax\n" puts
+	"\tmov %rax, (%r8)\n" puts
+	"\tadd $8, %r8\n" puts
+
+	1 add addr_of string_label_id swap store
 end

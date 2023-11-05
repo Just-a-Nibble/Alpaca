@@ -12,6 +12,14 @@ def throw_unterm_comment_eof_error ( -- EXIT )
 	"[ERROR] Unexpected End of File while Parsing Comment.\n" throw_error
 end
 
+def throw_unterm_string_eof_error ( -- EXIT )
+	"[ERROR] Unexpected End of File while Parsing String.\n" throw_error
+end
+
+def throw_unterm_string_eol_error ( -- EXIT )
+	"[ERROR] Unexpected End of Line while Parsing String.\n" throw_error
+end
+
 def throw_invalid_syntax_error ( -- EXIT )
 	"[ERROR] Invalid Syntax.\n" throw_error
 end
